@@ -1,0 +1,8 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#203300",
+    "titleBar.activeBackground": "#2C4700",
+    "titleBar.activeForeground": "#F1FFDB"
+  },
+  "cSpell.words": ["Cloudinary"]
+}
