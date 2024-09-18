@@ -1,34 +1,23 @@
-import { v2 as cloudinary, UploadResponseCallback } from "cloudinary";
+import Cloudinary, { cloudinaryConfig } from "@/lib/cloudinary";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, response: NextResponse) {
-  return NextResponse.json({ success: true }, { status: 200 });
-}
-
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest, response: Response) {
   try {
-    const data = await request.json();
+    const { paramsToSign } = await request.json();
 
-    console.log(data);
+    if (!paramsToSign)
+      return NextResponse.json(
+        { message: "Forbidden: Invalid params" },
+        { status: 403 }
+      );
 
-    return NextResponse.json({ data }, { status: 200 });
-
-    const uploadResponseCallback: UploadResponseCallback = (error, result) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(result);
-      }
-    };
-
-    await cloudinary.uploader.upload(
-      "https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg",
-      {
-        public_id: "shoes",
-      },
-      uploadResponseCallback
+    const signature = Cloudinary.utils.api_sign_request(
+      paramsToSign,
+      cloudinaryConfig.api_secret!
     );
+
+    return Response.json({ signature });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    return Response.json({ error }, { status: 500 });
   }
 }

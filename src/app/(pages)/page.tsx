@@ -1,9 +1,8 @@
 import MediaGallery from "@/components/MediaGallery";
-import Cloudinary from "@/lib/cloudinary";
+import { getAllResources } from "./actions";
 
 export default async function Home() {
-  const { resources }: CloudinaryAPIResourceResponse =
-    await Cloudinary.api.resources();
+  const { resources } = await getAllResources();
 
   return (
     <div className="h-full mt-6">
